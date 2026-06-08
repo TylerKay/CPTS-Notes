@@ -49,6 +49,25 @@ However, `Nmap` still gives us a way to specify DNS servers ourselves (`--dns-
 
 `tylapcheong@htb[/htb]$ sudo nmap 10.129.2.28 -p50000 -sS -Pn -n --disable-arp-ping --packet-trace --source-port 53`
 
+|**Scanning Options**|**Description**|
+|---|---|
+|`10.129.2.28`|Scans the specified target.|
+|`-p 50000`|Scans only the specified ports.|
+|`-sS`|Performs SYN scan on specified ports.|
+|`-Pn`|Disables ICMP Echo requests.|
+|`-n`|Disables DNS resolution.|
+|`--disable-arp-ping`|Disables ARP ping.|
+|`--packet-trace`|Shows all packets sent and received.|
+|`--source-port 53`|Performs the scans from specified source port.
+
+
 #### Connect To The Filtered Port
 
 `tylapcheong@htb[/htb]$ ncat -nv --source-port 53 10.129.2.28 50000`
+
+
+
+--
+sudo nc -nv -s 10.10.15.197 -p53 10.129.2.47 50000
+
+This command uses Netcat (`nc`) to establish a direct, raw network connection to a target server while **spoofing your network settings** to bypass firewall rules. 10.10.15.197 is current machine, listen on port 53. Target machine is 10.129.2.47 on port 50000.

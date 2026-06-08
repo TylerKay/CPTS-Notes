@@ -1,3 +1,6 @@
 {
-  "showLineNumber": false
+  "showLineNumber": false,
+  "newFileLocation": "current",
+  "alwaysUpdateLinks": true,
+  "attachmentFolderPath": "pasted_images"
 }
