@@ -4,66 +4,95 @@
     "type": "split",
     "children": [
       {
-        "id": "65f13adbefc5b643",
+        "id": "279351e024d9a3fa",
         "type": "tabs",
         "children": [
           {
-            "id": "b2dff53cc2aac5f6",
+            "id": "3829662193f70ef1",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Shells and Payloads/Introduction to Web Shells.md",
+                "file": "SQLMap/SQLMap Overview.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Introduction to Web Shells"
+              "title": "SQLMap Overview"
             }
           },
           {
-            "id": "b1853d9e7b39b7de",
+            "id": "7b8f11de939acbfb",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Shells and Payloads/Infiltrating Windows.md",
+                "file": "Active Directory Enumeration and Attacks/Intro to AD Enum and Attacks.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Infiltrating Windows"
+              "title": "Intro to AD Enum and Attacks"
             }
           },
           {
-            "id": "6519f20162b8ccbf",
+            "id": "b5a462abf31731a3",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Shells and Payloads/Infiltrating Unix-Linux.md",
+                "file": "Active Directory Enumeration and Attacks/Tool Reference.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Infiltrating Unix-Linux"
+              "title": "Tool Reference"
             }
           },
           {
-            "id": "7d21f9ca036ae33b",
+            "id": "4464a4f74bbba8ed",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Shells and Payloads/Spawning Interactive Shells.md",
+                "file": "Active Directory Enumeration and Attacks/Engagement Scenario and Scope.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Spawning Interactive Shells"
+              "title": "Engagement Scenario and Scope"
+            }
+          },
+          {
+            "id": "89577460c6fd8698",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Windows Server.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Windows Server"
+            }
+          },
+          {
+            "id": "885843460e6e204c",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Windows Privilege Escalation/Windows Desktop Versions.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Windows Desktop Versions"
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -83,7 +112,9 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical",
-                "autoReveal": false
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-folder-closed",
               "title": "Files"
@@ -95,7 +126,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "uac",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -136,12 +167,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Password Attacks/Cracking Protected Files.md",
+                "file": "Active Directory Enumeration and Attacks/Engagement Scenario and Scope.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Cracking Protected Files"
+              "title": "Outgoing links"
             }
           },
           {
@@ -174,27 +205,12 @@
             }
           },
           {
-            "id": "7455b6ec090fa317",
-            "type": "leaf",
-            "state": {
-              "type": "outline",
-              "state": {
-                "file": "Information Gathering/Service Enumeration/TFTP (UDP 69).md",
-                "followCursor": false,
-                "showSearch": false,
-                "searchQuery": ""
-              },
-              "icon": "lucide-list",
-              "title": "Outline of TFTP (UDP 69)"
-            }
-          },
-          {
             "id": "5e10ae6e705b7db2",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "File Transfer/Protected File Transfers.md",
+                "file": "Active Directory Enumeration and Attacks/Engagement Scenario and Scope.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -204,15 +220,25 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Protected File Transfers"
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "d5983b7da49f6580",
+            "type": "leaf",
+            "state": {
+              "type": "copilot-agent-chat-view",
+              "state": {},
+              "icon": "copilot-agent",
+              "title": "Copilot Agent"
             }
           }
-        ]
+        ],
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 309.5,
-    "collapsed": true
+    "width": 309.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -223,54 +249,59 @@
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
       "bases:Create new base": false,
-      "obsidian-git:Open Git source control": false
+      "obsidian-git:Open Git source control": false,
+      "copilot:Open Copilot Agent Chat": false
     }
   },
-  "active": "b2dff53cc2aac5f6",
+  "active": "d5983b7da49f6580",
   "lastOpenFiles": [
-    "Shells and Payloads/Crafting Payloads with MSFvenom.md",
-    "Shells and Payloads/Infiltrating Windows.md",
-    "Shells and Payloads/Infiltrating Unix-Linux.md",
-    "Shells and Payloads/Spawning Interactive Shells.md",
+    "copilot/skills/obsidian-cli/SKILL.md",
+    "copilot/skills/obsidian-cli/LICENSE",
+    "copilot/skills/obsidian-cli",
+    "copilot/skills/json-canvas/SKILL.md",
+    "copilot/skills/json-canvas/LICENSE",
+    "copilot/skills/json-canvas/references/EXAMPLES.md",
+    "copilot/skills/json-canvas/references",
+    "copilot/skills/json-canvas",
+    "copilot/skills/obsidian-bases/SKILL.md",
+    "copilot/skills/obsidian-bases/LICENSE",
+    "copilot/skills/obsidian-bases/references/EXAMPLES.md",
+    "copilot/skills/obsidian-bases/references/FUNCTIONS_REFERENCE.md",
+    "copilot/skills/obsidian-bases/references",
+    "copilot/skills/obsidian-bases",
+    "copilot/skills/obsidian-markdown/SKILL.md",
+    "copilot/skills/obsidian-markdown/LICENSE",
+    "copilot/skills/obsidian-markdown/references/PROPERTIES.md",
+    "copilot/skills/obsidian-markdown/references/EMBEDS.md",
+    "copilot/skills/obsidian-markdown/references/CALLOUTS.md",
+    "copilot/skills/obsidian-markdown/references",
+    "copilot/skills/symposium-publish/SKILL.md",
+    "copilot/skills/copilot-fetch-x/SKILL.md",
+    "copilot/skills/copilot-youtube-transcript/SKILL.md",
+    "copilot/skills/copilot-read-pdf/SKILL.md",
+    "copilot/skills/copilot-web-fetch/SKILL.md",
+    "copilot/skills/copilot-web-search/SKILL.md",
+    "Active Directory Enumeration and Attacks/Tool Reference.md",
+    "Active Directory Enumeration and Attacks/Engagement Scenario and Scope.md",
+    "Active Directory Enumeration and Attacks/Intro to AD Enum and Attacks.md",
+    "SQLMap/SQLMap Overview.md",
+    "1. Nmap/Enumeration.md",
+    "0. Methodologies/Initial Enumeration Methodology.md",
+    "Windows Privilege Escalation/Pillaging.md",
+    "Miscellaneous Techniques.md",
+    "Windows Privilege Escalation/Windows Desktop Versions.md",
+    "Helpful Commands.md",
+    "pasted_images/Pasted image 20260712152243.png",
+    "pasted_images/Pasted image 20260712152235.png",
+    "pasted_images/Pasted image 20260712145123.png",
+    "pasted_images/Types_of_SQL_Injection.png",
+    "pasted_images/windows_auth_process.png",
+    "pasted_images/concepts_of_attacks.png",
     "pasted_images/laundanum_shell_success.png",
-    "Shells and Payloads/Introduction to Web Shells.md",
-    "Shells and Payloads/Intro to Payloads - One liner code execution explained.md",
-    "Shells and Payloads/Automating Payloads & Delivery with Metasploit.md",
-    "Shells and Payloads/Shell.md",
-    "Shells and Payloads/Reverse Shells.md",
-    "File Transfer/Miscellaneous File Transfer Methods We've covered various methods for transferring files on Windows and Linux..md",
-    "Information Gathering/Asset Discovery/NMAP Firewall and IDS-IPS Evasion.md",
-    "File Transfer/Linux File Transfer Methods.md",
-    "README.md",
-    "Service Discovery.base",
-    "Information Gathering/Service Enumeration/NFS (111, 2049).md",
-    "Information Gathering/Service Enumeration/SMB (139, 445).md",
-    "Shells and Payloads/Bind Shells.md",
     "pasted_images/Pasted image 20260610172908.png",
-    "File Transfer/Protected File Transfers.md",
-    "Shells and Payloads",
-    "File Transfer/Windows File Transfer Methods.md",
-    "File Transfer/Transferring Files with Code.md",
-    "Password Attacks/Cracking Protected Files.md",
-    "File Transfer",
-    "Password Attacks/Writing Custom Wordlists and Rules.md",
     "pasted_images/Pasted image 20260607224122.png",
     "pasted_images/Pasted image 20260606235543.png",
-    "pasted_images/Pasted image 20260607000623.png",
-    "Password Attacks/pasted_images/Pasted image 20260607224010.png",
-    "Password Attacks/pasted_images",
-    "Password Attacks/Hashcat.md",
-    "Password Attacks/John the Ripper.md",
-    "Password Attacks",
-    "Information Gathering/Asset Discovery/NMAP.md",
-    "Information Gathering/Service Enumeration/TFTP (UDP 69).md",
-    "Pasted image 20260607000620.png",
     "Untitled.canvas",
-    "pasted_images",
-    "Information Gathering/Information Gathering.base",
-    "Information Gathering/OSINT",
-    "Information Gathering/Service Enumeration",
-    "Information Gathering/Asset Discovery",
     "Untitled 1.canvas"
   ]
 }
