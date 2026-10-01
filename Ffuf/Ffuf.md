@@ -2,24 +2,28 @@ There are many tools and methods to utilize for directory and parameter fuzzing/
 
 We can find the entire `SecLists` repo available under `/opt/useful/SecLists`. The specific wordlist we will be utilizing for pages and directory fuzzing is another commonly used wordlist called `directory-list-2.3`, and it is available in various forms and sizes. We can find the one we will be using under:
 
-`tylapcheong@htb[/htb]$ locate directory-list-2.3-small.txt`
+```bash
+tylapcheong@htb[/htb]$ locate directory-list-2.3-small.txt
+```
  
  
  As a new user of this tool, we will start by issuing the `ffuf -h` command to see how the tools can be used:
 tylapcheong@htb[/htb]$ ffuf -h
 
 ## Directory Fuzzing
-```
+```bash
 tylapcheong@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ
 ```
 
 Next, as we want to be fuzzing for web directories, we can place the `FUZZ` keyword where the directory would be within our URL, with:
 
-`tylapcheong@htb[/htb]$ ffuf -w <SNIP> -u http://SERVER_IP:PORT/FUZZ`
+```bash
+tylapcheong@htb[/htb]$ ffuf -w <SNIP> -u http://SERVER_IP:PORT/FUZZ
+```
 
 Now, let's start our target in the question below and run our final command on it:
 
-```
+```bash
 tylapcheong@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://SERVER_IP:PORT/FUZZ
 ```
 
@@ -28,13 +32,13 @@ We can even make it go faster if we are in a hurry by increasing the number of t
 # Page Fuzzing
 ## Extension Fuzzing
 
-```
+```bash
 tylapcheong@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/Web-Content/web-extensions.txt:FUZZ <SNIP>
 ```
 
 Now, we can rerun our command, carefully placing our FUZZ keyword where the extension would be after index:
 
-```
+```bash
 tylapcheong@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/Web-Content/web-extensions.txt:FUZZ -u http://SERVER_IP:PORT/blog/indexFUZZ
 ```
 
@@ -42,7 +46,9 @@ tylapcheong@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/Web-Content/web-ex
 
 We will now use the same concept of keywords we've been using with `ffuf`, use `.php` as the extension, place our `FUZZ` keyword where the filename should be, and use the same wordlist we used for fuzzing directories:
 
-`tylapcheong@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://SERVER_IP:PORT/blog/FUZZ.php`
+```bash
+tylapcheong@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://SERVER_IP:PORT/blog/FUZZ.php
+```
 
 
 # Recursive Fuzzing
@@ -55,8 +61,9 @@ So far, we have been fuzzing for directories, then going under these directories
 
 Let us repeat the first command we used, add the recursion flags to it while specifying `.php` as our extension, and see what results we get:
 
-        shellsession
-`tylapcheong@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://SERVER_IP:PORT/FUZZ -recursion -recursion-depth 1 -e .php -v`
+```bash
+tylapcheong@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://SERVER_IP:PORT/FUZZ -recursion -recursion-depth 1 -e .php -v
+```
 
 # DNS Records
 
@@ -66,7 +73,7 @@ Once we accessed the page under `/blog`, we got a message saying `Admin panel 
 
 This is because the exercises we do are not public websites that can be accessed by anyone but local websites within HTB. Browsers only understand how to go to IPs, and if we provide them with a URL, they try to map the URL to an IP by looking into the local `/etc/hosts` file and the public DNS `Domain Name System`. If the URL is not in either, it would not know how to connect to it.
 
-```
+```bash
 tylapcheong@htb[/htb]$ sudo sh -c 'echo "SERVER_IP academy.htb" >> /etc/hosts
 ```
 
@@ -78,13 +85,13 @@ In this section, we will learn how to use `ffuf` to identify sub-domains (i.e.
 
 As for our target, we will use `inlanefreight.com` as our target and run our scan on it. Let us use `ffuf` and place the `FUZZ` keyword in the place of sub-domains, and see if we get any hits:
 
-```
+```bash
 tylapcheong@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u https://FUZZ.inlanefreight.com/
 ```
 
 We see that we do get a few hits back. Now, we can try running the same thing on `academy.htb` and see if we get any hits back:
 
-```
+```bash
 tylapcheong@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://FUZZ.academy.htb/
 ```
 
@@ -112,7 +119,9 @@ This is where we utilize `VHosts Fuzzing` on an IP we already have. We will ru
 
 To scan for VHosts, without manually adding the entire wordlist to our `/etc/hosts`, we will be fuzzing HTTP headers, specifically the `Host:` header. To do that, we can use the `-H` flag to specify a header and will use the `FUZZ` keyword within it, as follows:
 
-`tylapcheong@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://academy.htb:PORT/ -H 'Host: FUZZ.academy.htb'`
+```bash
+tylapcheong@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://academy.htb:PORT/ -H 'Host: FUZZ.academy.htb'
+```
 
 We see that all words in the wordlist are returning `200 OK`! This is expected, as we are simply changing the header while visiting `http://academy.htb:PORT/`. So, we know that we will always get `200 OK`. However, if the VHost does exist and we send a correct one in the header, we should get a different response size, as in that case, we would be getting the page from that VHosts, which is likely to show a different page.
 
@@ -126,7 +135,7 @@ So far, we have not been using any filtering to our `ffuf`, and the results are
 
 `Ffuf` provides the option to match or filter out a specific HTTP code, response size, or amount of words. Find out by using ffuf -h
 
-```
+```bash
 tylapcheong@htb[/htb]$ ffuf -h
 ...SNIP...
 MATCHER OPTIONS:
@@ -147,7 +156,7 @@ FILTER OPTIONS:
 
 We know the response size of the incorrect results, which, as seen from the test above, is `900`, and we can filter it out with `-fs 900`. Now, let's repeat the same previous command, add the above flag, and see what we get:
 
-```
+```bash
 tylapcheong@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://academy.htb:PORT/ -H 'Host: FUZZ.academy.htb' -fs 900
 ```
 
@@ -171,7 +180,7 @@ Similarly to how we have been fuzzing various parts of a website, we will use `
 
 Once again, we will get many results back, so we will filter out the default response size we are getting.
 
-```
+```bash
 tylapcheong@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u http://admin.academy.htb:PORT/admin/admin.php?FUZZ=key -fs xxx
 ```
 # Parameter Fuzzing - POST
@@ -186,13 +195,15 @@ Tip: In PHP, "POST" data "content-type" can only accept "application/x-www-form-
 
 So, let us repeat what we did earlier, but place our `FUZZ` keyword after the `-d` flag:
 
-```
+```bash
 tylapcheong@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u http://admin.academy.htb:PORT/admin/admin.php -X POST -d 'FUZZ=key' -H 'Content-Type: application/x-www-form-urlencoded' -fs xxx
 ```
 
 As we can see this time, we got a couple of hits, the same one we got when fuzzing `GET` and another parameter, which is `id`. Let's see what we get if we send a `POST` request with the `id` parameter. We can do that with `curl`, as follows:
 
-`tylapcheong@htb[/htb]$ curl http://admin.academy.htb:PORT/admin/admin.php -X POST -d 'id=key' -H 'Content-Type: application/x-www-form-urlencoded' <div class='center'><p>Invalid id!</p></div> <...SNIP...>`
+```bash
+tylapcheong@htb[/htb]$ curl http://admin.academy.htb:PORT/admin/admin.php -X POST -d 'id=key' -H 'Content-Type: application/x-www-form-urlencoded' <div class='center'><p>Invalid id!</p></div> <...SNIP...>
+```
 
 As we can see, the message now says `Invalid id!`.
 
@@ -209,18 +220,21 @@ In other cases, like custom parameters, we may have to develop our own wordlist.
 
 There are many ways to create this wordlist, from manually typing the IDs in a file, or scripting it using Bash or Python. The simplest way is to use the following command in Bash that writes all numbers from 1-1000 to a file:
 
-`tylapcheong@htb[/htb]$ for i in $(seq 1 1000); do echo $i >> ids.txt; done`
+```bash
+tylapcheong@htb[/htb]$ for i in $(seq 1 1000); do echo $i >> ids.txt; done
+```
 
 ## Value Fuzzing
 
 Our command should be fairly similar to the `POST` command we used to fuzz for parameters, but our `FUZZ` keyword should be put where the parameter value would be, and we will use the `ids.txt` wordlist we just created, as follows:
 
-`tylapcheong@htb[/htb]$ ffuf -w ids.txt:FUZZ -u http://admin.academy.htb:PORT/admin/admin.php -X POST -d 'id=FUZZ' -H 'Content-Type: application/x-www-form-urlencoded' -fs xxx`
-
+```bash
+tylapcheong@htb[/htb]$ ffuf -w ids.txt:FUZZ -u http://admin.academy.htb:PORT/admin/admin.php -X POST -d 'id=FUZZ' -H 'Content-Type: application/x-www-form-urlencoded' -fs xxx
+```
 
 
 Side-note
 To send a curl POST with parameter id 73:
-```
+```bash
 curl -X POST http://admin.academy.htb:32022/admin/admin.php -d "id=73"
 ```

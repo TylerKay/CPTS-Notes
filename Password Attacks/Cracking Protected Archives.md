@@ -5,7 +5,7 @@ Besides standalone files, we will often run across `archives` and `compressed
 The `ZIP` format is often heavily used in Windows environments to compress many files into one file. The process of cracking an encrypted ZIP file is similar to what we have seen already, except for using a different script to extract the hashes.
 
 `
-```
+```bash
 tylapcheong@htb[/htb]$ zip2john ZIP.zip > zip.hash
 tylapcheong@htb[/htb]$ cat zip.hash 
 
@@ -14,7 +14,7 @@ ZIP.zip/customers.csv:$pkzip2$1*2*2*0*2a*1e*490e7510*0*42*0*2a*490e*409b*ef1e7fe
 
 Once we have extracted the hash, we can use JtR to crack it with the desired password list.
 
-```
+```bash
 tylapcheong@htb[/htb]$ john --wordlist=rockyou.txt zip.hash
 
 Using default input encoding: UTF-8
@@ -38,10 +38,16 @@ It is not always immediately apparent whether a file is password-protected, part
 
 The following one-liner may produce several GZIP-related error messages, which can be safely ignored. If the correct password list is used, as in this example, we will see another file successfully extracted from the archive.
 
-`tylapcheong@htb[/htb]$ for i in $(cat rockyou.txt);do openssl enc -aes-256-cbc -d -in GZIP.gzip -k $i 2>/dev/null| tar xz;done`
+```bash
+tylapcheong@htb[/htb]$ for i in $(cat rockyou.txt);do openssl enc -aes-256-cbc -d -in GZIP.gzip -k $i 2>/dev/null| tar xz;done
+```
 
 Once the `for` loop has finished, we can check the current directory for a newly extracted file.
-`tylapcheong@htb[/htb]$ ls customers.csv  GZIP.gzip  rockyou.txt`
+```bash
+tylapcheong@htb[/htb]$ ls 
+
+customers.csv  GZIP.gzip  rockyou.txt
+```
 
 ## Cracking BitLocker-encrypted drives
 
@@ -51,7 +57,7 @@ tylapcheong@htb[/htb]$ bitlocker2john -i Backup.vhd > backup.hashes tylapcheong@
 
 Once a hash is generated, either `JtR` or `hashcat` can be used to crack it. For this example, we will look at the procedure with `hashcat`. The hashcat mode associated with the `$bitlocker$0$...` hash is `-m 22100`. We supply the hash, specify the wordlist, and define the hash mode. Since this encryption uses strong AES encryption, cracking may take considerable time depending on hardware performance.
 
-```
+```bash
 tylapcheong@htb[/htb]$ hashcat -a 0 -m 22100 
 
 $bitlocker$0$16$02b329c0453b9273f2fc1b927443b5fe$1048576$12$00b0a67f961dd80103000000$60$d59f37e70696f7eab6b8f95ae93bd53f3f7067d5e33c0394b3d8e2d1fdb885cb86c1b978f6cc12ed26de0889cd2196b0510bbcd2a8c89187ba8ec54f' /usr/share/wordlists/rockyou.txt`
@@ -71,21 +77,21 @@ Next, we create two folders which we will use to mount the VHD.
 
 
 We then use `losetup` to configure the VHD as [loop device](https://en.wikipedia.org/wiki/Loop_device), decrypt the drive using `dislocker`, and finally mount the decrypted volume:
-```
+```bash
 tylapcheong@htb[/htb]$ sudo losetup -f -P Backup.vhd
 tylapcheong@htb[/htb]$ sudo dislocker /dev/loop0p2 -u1234qwer -- /media/bitlocker
 tylapcheong@htb[/htb]$ sudo mount -o loop /media/bitlocker/dislocker-file /media/bitlockermount
 ```
 
 If everything was done correctly, we can now browse the files:
-```
+```bash
 tylapcheong@htb[/htb]$ cd /media/bitlockermount/
 tylapcheong@htb[/htb]$ ls -la
 ```
 
 Once we have analyzed the files on the mounted drive, we can unmount it using the following commands:
 
-```
+```bash
 tylapcheong@htb[/htb]$ sudo umount /media/bitlockermount
 tylapcheong@htb[/htb]$ sudo umount /media/bitlocker
 ```

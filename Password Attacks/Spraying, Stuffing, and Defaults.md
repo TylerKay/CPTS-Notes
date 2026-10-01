@@ -4,9 +4,8 @@
 
 Depending on the target system, different tools may be used to carry out password spraying attacks. For web applications, [Burp Suite](https://portswigger.net/burp) is a strong option, while for Active Directory environments, tools such as [NetExec](https://github.com/Pennyw0rth/NetExec) or [Kerbrute](https://github.com/ropnop/kerbrute) are commonly used.
 
-```
+```bash
 tylapcheong@htb[/htb]$ netexec smb 10.100.38.0/24 -u <usernames.list> -p 'ChangeMe123!'
-
 ```
 
 ## Credential stuffing
@@ -15,7 +14,7 @@ tylapcheong@htb[/htb]$ netexec smb 10.100.38.0/24 -u <usernames.list> -p 'Change
 
 For example, if we have a list of `username:password` credentials obtained from a database leak, we can use `hydra` to perform a credential stuffing attack against an SSH service using the following syntax:
 
-```
+```bash
 tylapcheong@htb[/htb]$ hydra -C user_pass.list ssh://10.100.38.23
 ```
 
@@ -23,10 +22,12 @@ tylapcheong@htb[/htb]$ hydra -C user_pass.list ssh://10.100.38.23
 
 Many systems—such as routers, firewalls, and databases—come with `default credentials`.
 
-`tylapcheong@htb[/htb]$ pip3 install defaultcreds-cheat-sheet`
+```bash
+tylapcheong@htb[/htb]$ pip3 install defaultcreds-cheat-sheet
+```
 
 Once installed, we can use the `creds` command to search for known default credentials associated with a specific product or vendor.
 
-```
+```bash
 tylapcheong@htb[/htb]$ creds search linksys
 ```

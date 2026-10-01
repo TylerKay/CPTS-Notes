@@ -5,30 +5,42 @@
 `Single crack mode` is a rule-based cracking technique that is most useful when targeting Linux credentials. 
 These strings are run against a large set of rules that apply common string modifications seen in passwords (e.g. a user whose real name is `Bob Smith` might use `Smith1` as their password).
 
+```bash
 tylapcheong@htb[/htb]$ john --single passwd
+```
 
 #### Wordlist mode
 
 `Wordlist mode` is used to crack passwords with a dictionary attack, meaning it attempts all passwords in a supplied wordlist against the password hash. The basic syntax for the command is as follows:
 
-`tylapcheong@htb[/htb]$ john --wordlist=<wordlist_file> <hash_file>`
+```bash
+tylapcheong@htb[/htb]$ john --wordlist=<wordlist_file> <hash_file>
+```
 
 #### Incremental mode
 
 `Incremental mode` is a powerful, brute-force-style password cracking mode that generates candidate passwords based on a statistical model ([Markov chains](https://en.wikipedia.org/wiki/Markov_chain)).
 
 The basic syntax is:
-`tylapcheong@htb[/htb]$ john --incremental <hash_file>`
+```bash
+tylapcheong@htb[/htb]$ john --incremental <hash_file>
+```
 
 You can customize these or define your own to target passwords that use special characters or specific patterns.
-`tylapcheong@htb[/htb]$ grep '# Incremental modes' -A 100 /etc/john/john.conf`
+
+```bash
+tylapcheong@htb[/htb]$ grep '# Incremental modes' -A 100 /etc/john/john.conf
+```
 
 ## Identifying hash formats
 
 Sometimes, password hashes may appear in an unknown format, and even John the Ripper (JtR) may not be able to identify them with complete certainty. For example, consider the following hash:
 
 One way to get an idea is to consult [JtR's sample hash documentation](https://openwall.info/wiki/john/sample-hashes), or [this list by PentestMonkey](https://pentestmonkey.net/cheat-sheet/john-the-ripper-hash-formats). Both sources list multiple example hashes as well as the corresponding JtR format. Another option is to use a tool like [hashID](https://github.com/psypanda/hashID), which checks supplied hashes against a built-in list to suggest potential formats. By adding the `-j` flag, hashID will, in addition to the hash format, list the corresponding JtR format:
-`tylapcheong@htb[/htb]$ hashid -j 193069ceb0461e1d40d216e32c79c704`
+
+```bash
+tylapcheong@htb[/htb]$ hashid -j 193069ceb0461e1d40d216e32c79c704
+```
 
 
 JtR supports hundreds of hash formats, some of which are listed in the table below. The `--format` argument can be supplied to instruct JtR which format target hashes have.
@@ -66,4 +78,7 @@ Some of the tools included with JtR are:
 |`office2john`|Converts MS Office documents for John|
 |`wpa2john`|Converts WPA/WPA2 handshakes for John|
 An even larger collection can be found on the `Pwnbox`:
-`tylapcheong@htb[/htb]$ locate *2john*`
+
+```bash
+tylapcheong@htb[/htb]$ locate *2john*
+```
